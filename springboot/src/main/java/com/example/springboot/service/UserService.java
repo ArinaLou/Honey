@@ -27,7 +27,7 @@ public class UserService extends ServiceImpl<UserMapper, User> {
             entity.setPassword("123");
         }
         if(StrUtil.isBlank(entity.getRole())){
-            entity.setRole("User");
+            entity.setRole("user");
         }
         return super.save(entity);
     }
@@ -36,21 +36,20 @@ public class UserService extends ServiceImpl<UserMapper, User> {
     public User selectByUsername(String username) {
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("username", username);  //  eq => ==   where username = #{username}
-        // 根据用户名查询数据库的用户信息
         return getOne(queryWrapper); //  select * from user where username = #{username}
     }
 
-    // 验证用户账户是否合法
+
     public User login(User user) {
         User dbUser = selectByUsername(user.getUsername());
         if (dbUser == null) {
-            // 抛出一个自定义的异常
+
             throw new ServiceException("Incorrect username or password");
         }
         if (!user.getPassword().equals(dbUser.getPassword())) {
             throw new ServiceException("Incorrect username or password");
         }
-        // 生成token
+
         String token = TokenUtils.createToken(dbUser.getId().toString(), dbUser.getPassword());
         dbUser.setToken(token);
         return dbUser;
@@ -59,7 +58,6 @@ public class UserService extends ServiceImpl<UserMapper, User> {
     public User register(User user) {
         User dbUser = selectByUsername(user.getUsername());
         if (dbUser != null) {
-            // 抛出一个自定义的异常
             throw new ServiceException("Username already exists");
         }
         user.setName(user.getUsername());
@@ -70,13 +68,12 @@ public class UserService extends ServiceImpl<UserMapper, User> {
     public void resetPassword(User user) {
         User dbUser = selectByUsername(user.getUsername());
         if (dbUser == null) {
-            // 抛出一个自定义的异常
             throw new ServiceException("User does not exist");
         }
         if (!user.getPhone().equals(dbUser.getPhone())) {
             throw new ServiceException("Verification error");
         }
-        dbUser.setPassword("123");   // 重置密码
+        dbUser.setPassword("123");
         updateById(dbUser);
     }
 }

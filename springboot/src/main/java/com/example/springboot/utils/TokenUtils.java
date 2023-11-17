@@ -29,7 +29,7 @@ public class TokenUtils {
     }
 
     /**
-     * 生成token
+     * Generate token
      *
      * @return
      */
@@ -40,7 +40,7 @@ public class TokenUtils {
     }
 
     /**
-     * 获取当前登录的用户信息
+     * Get information about the currently logged in user
      *
      * @return user对象
      */
