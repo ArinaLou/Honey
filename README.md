@@ -1,1 +1,1 @@
-# Honey
+# HUI project
